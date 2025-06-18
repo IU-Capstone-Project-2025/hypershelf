@@ -1,6 +1,6 @@
 "use client";
 
-import { FieldsInventory } from "@/components/inventories/FieldsInventory";
+import { FieldsInventory } from "@/components/inventories/fields/FieldsInventory";
 
 export default function FieldsPage() {
   return (

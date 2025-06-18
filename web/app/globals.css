@@ -47,6 +47,10 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --animate-load: load 500ms ease-in-out infinite;
+  --animate-load-slow: load 1s ease-in-out infinite;
+  --animate-brand-load: load 650ms ease-in-out infinite;
+  --animate-brand-once: brand-hover 300ms ease-in-out forwards;
 }
 
 body {
@@ -94,5 +98,29 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  @keyframes load {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  @keyframes brand-hover {
+    0% {
+      transform: translateX(0%);
+    }
+    49% {
+      transform: translateX(100%);
+    }
+    50% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(0%);
+    }
   }
 }

@@ -22,11 +22,13 @@ import { SortableItem } from "./sortable-item";
 interface OptionsInputProps {
   options: string[];
   onChange: (options: string[]) => void;
+  disabled?: boolean;
 }
 
 export const OptionsInput: React.FC<OptionsInputProps> = ({
   options,
-  onChange
+  onChange,
+  disabled = false
 }) => {
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -55,7 +57,11 @@ export const OptionsInput: React.FC<OptionsInputProps> = ({
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
       >
-        <SortableContext items={options} strategy={verticalListSortingStrategy}>
+        <SortableContext
+          items={options}
+          strategy={verticalListSortingStrategy}
+          disabled={disabled}
+        >
           {options.map((opt, idx) => (
             <SortableItem key={opt || `opt-${idx}`} id={opt || `opt-${idx}`}>
               <div className="flex items-center gap-1">
@@ -63,6 +69,7 @@ export const OptionsInput: React.FC<OptionsInputProps> = ({
                   size="icon"
                   variant="ghost"
                   className="size-7 cursor-grab"
+                  disabled={disabled}
                 >
                   <GripVertical className="size-3" />
                 </Button>
@@ -71,12 +78,14 @@ export const OptionsInput: React.FC<OptionsInputProps> = ({
                   onChange={e => updateOption(idx, e.target.value)}
                   placeholder="Option"
                   className="h-auto flex-1 py-1 text-xs"
+                  disabled={disabled}
                 />
                 <Button
                   size="icon"
                   variant="ghost"
                   onClick={() => removeOption(idx)}
                   className="size-7"
+                  disabled={disabled}
                 >
                   <Trash className="size-3" />
                 </Button>
@@ -86,7 +95,12 @@ export const OptionsInput: React.FC<OptionsInputProps> = ({
         </SortableContext>
       </DndContext>
 
-      <Button size="sm" onClick={addOption} className="w-fit">
+      <Button
+        size="sm"
+        onClick={addOption}
+        className="w-fit"
+        disabled={disabled}
+      >
         <Plus className="h-4 w-4" /> Add option
       </Button>
     </div>

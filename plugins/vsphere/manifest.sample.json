@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Hypershelf vSphere Integration",
+  "version": "1.0",
+  "description": "Hypershelf integration with VMWare vSphere",
+  "permissions": ["scripting"],
+  "host_permissions": ["https://$VSPHERE_HOSTNAME$/ui/app/vm*"],
+  "content_scripts": [
+    {
+      "matches": ["https://$VSPHERE_HOSTNAME$/ui/app/vm*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["content.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

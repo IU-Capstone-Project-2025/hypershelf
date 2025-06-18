@@ -19,9 +19,10 @@ import {
 import { useAuthActions } from "@convex-dev/auth/react";
 import { pwnedPassword } from "hibp";
 import { Cloud, KeyRound, Loader2Icon } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { z } from "zod";
+import { useLoading } from "@/components/util/LoadingContext";
 
 const schema = z
   .object({
@@ -65,6 +66,32 @@ export default function SignIn() {
     passwordConfirm?: string;
   }>({});
   const router = useRouter();
+
+  const { isLoading, setIsLoading } = useLoading();
+
+  useEffect(() => {
+    if (isLoading) setIsLoading(false);
+  }, [isLoading, setIsLoading]);
+
+  useEffect(() => {
+    window.parent.postMessage(
+      {
+        type: "HYPERSHELF",
+        action: "UPDATE_HEIGHT",
+        data: {
+          height: flow === "signIn" ? 340 : 380
+        }
+      },
+      "*"
+    );
+  }, [flow]);
+
+  const params = useSearchParams();
+  const ergo = params.get("ergo") || "/";
+  const isRelativePath = (path: string) => {
+    return path.startsWith("/") && !path.startsWith("//");
+  };
+
   const validate = (name: string, value: string) => {
     const toValidate =
       flow === "signUp"
@@ -172,7 +199,7 @@ export default function SignIn() {
         );
       })
       .then(() => {
-        router.push("/");
+        router.push(isRelativePath(ergo) ? ergo : "/");
       })
       .finally(() => {
         setLoading(false);
@@ -180,11 +207,11 @@ export default function SignIn() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <Card className="w-full max-w-md">
+    <div className="flex items-center justify-center md:min-h-screen">
+      <Card className="w-full max-w-md gap-2 py-4 md:gap-6 md:py-6">
         <CardHeader>
-          <CardTitle className="font-title relative text-2xl font-extrabold">
-            <div className="bg-brand absolute bottom-0 left-0 h-1 w-6"></div>
+          <CardTitle className="font-title relative text-lg font-extrabold md:text-2xl">
+            <div className="bg-brand absolute bottom-0.5 left-0 h-0.5 w-4 md:bottom-0 md:h-1 md:w-6"></div>
             {flow === "signIn" ? "Login" : "Sign Up"}
           </CardTitle>
         </CardHeader>

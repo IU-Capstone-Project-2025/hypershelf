@@ -19,8 +19,20 @@ export default defineSchema({
   fields: defineTable({
     name: v.string(),
     slug: v.string(),
-    type: v.string(),
+    type: v.union(
+      v.literal("string"),
+      v.literal("number"),
+      v.literal("boolean"),
+      v.literal("array"),
+      v.literal("select"),
+      v.literal("date"),
+      v.literal("email"),
+      v.literal("user"),
+      v.literal("url"),
+      v.literal("ip")
+    ),
     required: v.boolean(),
+    hidden: v.optional(v.boolean()),
     extra: v.optional(
       v.object({
         description: v.optional(v.string()),
@@ -36,6 +48,7 @@ export default defineSchema({
         icon: v.optional(v.string()),
         options: v.optional(v.array(v.string())),
         hideFromSearch: v.optional(v.boolean()),
+        subnet: v.optional(v.string()),
         listObjectType: v.optional(v.string()),
         listObjectExtra: v.optional(
           v.object({
@@ -53,7 +66,8 @@ export default defineSchema({
     ),
     editing: v.optional(v.boolean()),
     editingBy: v.optional(v.id("users")),
-    editingLockExpires: v.optional(v.number())
+    editingLockExpires: v.optional(v.number()),
+    persistent: v.optional(v.boolean())
   })
 });
 
